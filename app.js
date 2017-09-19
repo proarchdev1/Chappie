@@ -9,10 +9,11 @@ var bot = controller.spawn({
 });
 
 var aPI="http://27.250.12.93:3000/";
+//var aPI="http://localhost:3000/"
 var requestify = require('requestify'); 
 
 
-controller.setupWebserver(process.env.port || 3000, function(err, webserver) {
+controller.setupWebserver(process.env.port || 8080, function(err, webserver) {
     controller.createWebhookEndpoints(webserver, bot, function() {
         console.log('ONLINE!');
     
@@ -28,17 +29,6 @@ controller.hears(['cookies'], 'message_received', function(bot, message) {
             convo.say('Golly, I love ' + response.text + ' too!!!');
             convo.next();
         });
-    });
-});
-
-
-controller.hears(['hello', 'hi','hey'], 'message_received', function (bot, message) {
-    controller.storage.users.get(message.user, function (err, user) {
-        if (user && user.name) {
-            bot.reply(message, 'Hello ' + user.name + '! What can I do for you today?');
-        } else {
-            bot.reply(message, 'Hello. What can I do for you today?????');
-        }
     });
 });
 
@@ -81,10 +71,6 @@ controller.hears(['hello', 'hi','hey'], 'message_received', function (bot, messa
     });
 });
 
-function myFunc(arg) {
-	console.log(`arg was => ${arg}`);
-  }
-  
 
   
 
@@ -102,7 +88,6 @@ controller.hears(['reset my password', 'reset password','can you reset my passwo
 			{
 				console.log("User Exists");
 				  requestify.get(aPI+'api/sendpassresetotp/'+username).then(function(response) {
-						setTimeout(myFunc, 1500, 'funky');
 						var sendpassresetotpBody=response.getBody();
 						var verifyOTP=sendpassresetotpBody.otp;
 						var emailphoneverfied=sendpassresetotpBody.emailphoneverfied;
@@ -122,7 +107,7 @@ controller.hears(['reset my password', 'reset password','can you reset my passwo
 												 var passChangedBody=response.getBody();
 												 if(passChangedBody.otpsent==true)
 												 {
-													 convo.say("Hey, I sent you temporary password for "+username);
+													 convo.say("Hey,"+username+" I sent you temporary password for your mailID and mobile");
 													 convo.next();
 												 }
 												 else{

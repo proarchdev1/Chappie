@@ -122,7 +122,7 @@ controller.hears(['reset my password', 'reset password','can you reset my passwo
 												 var passChangedBody=response.getBody();
 												 if(passChangedBody.otpsent==true)
 												 {
-													 convo.say("Hey, I sent you temporary password for "+username);
+													 convo.say("Hey,"+username+" I sent you temporary password for your mailID and mobile");
 													 convo.next();
 												 }
 												 else{
