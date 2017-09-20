@@ -8,8 +8,8 @@ var bot = controller.spawn({
     appPassword: 'W0bS9NAJHQo9aXbbqD4sW4w'
 });
 
-var aPI="https://27.250.12.93:3000/";
-//var aPI="http://localhost:3000/"
+//var aPI="https://27.250.12.93:3000/";
+var aPI="https://192.168.21.163:3000/"
 var requestify = require('requestify'); 
 
 
@@ -72,9 +72,99 @@ controller.hears(['hello', 'hi','hey'], 'message_received', function (bot, messa
 });
 
 
+controller.hears(['reset my password', 'reset password','can you reset my password', 'change password', 'change my password', 'password reset'], 'message_received', function (bot, message) {
+    bot.startConversation(message, function (err, convo) {
+	 convo.say('Sure thing...');
+	 convo.next();
+        convo.ask('What is your username? ', function (response, convo) 
+		{
+		var username=response.text;
+			convo.say('Please Wait....');
+			convo.next();	
+				  requestify.get(aPI+'api/sendpassresetotp/'+username).then(function(response) {
+						var sendpassresetotpBody=response.getBody();
+						if(!sendpassresetotpBody.usernotfound)
+						{
+						var verifyOTP=sendpassresetotpBody.otp;
+						var emailphoneverfied=sendpassresetotpBody.emailphoneverfied;
+						var nouserdetails=sendpassresetotpBody.nouserdetails
+						var emailsent=sendpassresetotpBody.emailsent;
+						var phoneverified=sendpassresetotpBody.phoneverified;
+						var emailverified=sendpassresetotpBody.emailverified;
+						console.log(sendpassresetotpBody);
+						if(emailphoneverfied==true&&emailsent==true)
+						{
+							bot.startConversation(message, function (err, convo) {
+							convo.ask('Please provide the OTP sent to your mail', function (response, convo) {							
+                                      if(verifyOTP == response.text){
+										  console.log("otp verified");
+										  convo.say("OTP verified, please wait while I reset your password");
+											 requestify.get(aPI+'api/resetpassword/'+username).then(function(response) {
+												 var passChangedBody=response.getBody();
+												 if(passChangedBody.otpsent==true)
+												 {
+													 convo.say("Hey,"+username+" I sent you temporary password for next login");
+													 convo.next();
+												 }
+												 else{
+												 convo.say("I am sorry, Please try again");
+												 convo.next();
+												 }									 
+											 });										  									  
+									  }
+									  else{
+										   convo.say("OTP verification failed");
+										   convo.say("Anything else you want me to do?");
+											convo.next();
+									  }
+									  convo.next();
+							});
+							});
+						}
+						else if(emailphoneverfied == true && emailsent == false && nouserdetails == false){	
+						bot.startConversation(message, function (err, convo) {
+							convo.say("Email or phone are not verified, please sign in to portal and verify your account");
+							convo.say("Anything else you want me to do?");
+							convo.next();
+						});
+						}
+						
+						else if(emailphoneverfied==false && emailsent==false && nouserdetails == true)
+						{
+							bot.startConversation(message, function (err, convo) {	
+							   console.log("no user details sign in to portal");
+							   convo.say("I cannot find your details, please sign into portal");
+							   convo.next();
+							});
+						}
+						else{
+							 bot.startConversation(message, function (err, convo) {	
+							 console.log("Server is busy,Please try again later ");
+							 convo.say("Server is busy,Please try again later");
+							 convo.next();
+							});
+						}		
+						convo.next();
+
+					}
+					else
+						{
+						bot.startConversation(message, function (err, convo) {	
+						convo.say("User not found");
+						console.log("User not found");
+						convo.next();
+						});
+						}
+				});												  
+	convo.next();
+	});
+	});
+});
+
+
   
 
-
+/*
 controller.hears(['reset my password', 'reset password','can you reset my password', 'change password', 'change my password', 'password reset'], 'message_received', function (bot, message) {
     bot.startConversation(message, function (err, convo) {
 	 convo.say('Sure thing...');
@@ -139,8 +229,9 @@ controller.hears(['reset my password', 'reset password','can you reset my passwo
 										
 										if(err==true)
 										{
+											console.log(err);
 											bot.startConversation(message, function (err, convo) {
-												convo.say("Error sending OTP please try again later...");
+												convo.say("Error sending Email OTP please try again later...");
 												convo.next();
 											});	
 										}
@@ -163,14 +254,14 @@ controller.hears(['reset my password', 'reset password','can you reset my passwo
 													 convo.next();
 													}																									
 												});										
-												});									
+												});			
+												convo.next();						
 										}
 										});	
 
 								}	
 								if(phoneverified!='y')
 								{
-									convo.next();
 									requestify.get(aPI+'api/verifymobile/').then(function(response) {
 										var mobileverificationBody=response.getBody();
 										var err=mobileverificationBody.error;
@@ -246,5 +337,5 @@ controller.hears(['reset my password', 'reset password','can you reset my passwo
 	convo.next();
 	});
 	});
-});
+});*/
 
