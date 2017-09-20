@@ -84,11 +84,10 @@ controller.hears(['reset my password', 'reset password','can you reset my passwo
 		var username=response.text;
 			convo.say('Please Wait....');
 			convo.next();	
-			if(true)
-			{
-				console.log("User Exists");
 				  requestify.get(aPI+'api/sendpassresetotp/'+username).then(function(response) {
 						var sendpassresetotpBody=response.getBody();
+						if(!sendpassresetotpBody.usernotfound)
+						{
 						var verifyOTP=sendpassresetotpBody.otp;
 						var emailphoneverfied=sendpassresetotpBody.emailphoneverfied;
 						var nouserdetails=sendpassresetotpBody.nouserdetails
@@ -236,16 +235,17 @@ controller.hears(['reset my password', 'reset password','can you reset my passwo
 							});
 						}		
 						convo.next();
-				});								
-			}
-		   
-			else
-			{
-			convo.say("User not found");
-			console.log("User not found");
-			convo.next();
-			}
-		  
+
+					}
+					else
+						{
+						bot.startConversation(message, function (err, convo) {	
+						convo.say("User not found");
+						console.log("User not found");
+						convo.next();
+						});
+						}
+				});												  
 	convo.next();
 	});
 	});
