@@ -131,7 +131,6 @@ controller.hears(['reset my password', 'reset password','can you reset my passwo
 							{							
 								if(emailverified!='y')
 								{
-									convo.next();
 									requestify.get(aPI+'api/verifyemail/').then(function(response) {
 										var emailverificationBody=response.getBody();
 										var err=emailverificationBody.error;
@@ -155,14 +154,12 @@ controller.hears(['reset my password', 'reset password','can you reset my passwo
 													  requestify.get(aPI+'api/emailverified/'+username).then(function(response) {
 														  
 													  });
-													  convo.say("email verification done");
-													  convo.say("anything else you want me to do?");
+													  convo.say("email verification done");												 
 													  convo.next();
 																		  									  
 													}
 													else{
-													 convo.say("email verification failed");
-													 convo.say("anything else you want me to do?");
+													 convo.say("email verification failed");													
 													 convo.next();
 													}																									
 												});										
@@ -206,8 +203,8 @@ controller.hears(['reset my password', 'reset password','can you reset my passwo
 												});									
 										}
 										});	
-								}	
-								convo.next();							
+								}							
+								convo.next();			
 							}		
 							else{
 							console.log("email or phone are not verified");
