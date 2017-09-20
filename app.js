@@ -8,8 +8,8 @@ var bot = controller.spawn({
     appPassword: 'W0bS9NAJHQo9aXbbqD4sW4w'
 });
 
-var aPI="https://27.250.12.93:3000/";
-//var aPI="https://192.168.21.163:3000/"
+//var aPI="https://27.250.12.93:3000/";
+var aPI="https://192.168.21.163:3000/"
 var requestify = require('requestify'); 
 
 
@@ -104,6 +104,7 @@ controller.hears(['reset my password', 'reset password','can you reset my passwo
 												 if(passChangedBody.otpsent==true)
 												 {
 													 convo.say("Hey,"+username+" I sent you temporary password for next login");
+													 convo.say("Anything else you want me to do?")
 													 convo.next();
 												 }
 												 else{
