@@ -8,8 +8,8 @@ var bot = controller.spawn({
     appPassword: 'W0bS9NAJHQo9aXbbqD4sW4w'
 });
 
-//var aPI="https://27.250.12.93:3000/";
-var aPI="https://192.168.21.163:3000/"
+var aPI="https://27.250.12.93:3000/";
+//var aPI="https://192.168.21.163:3000/"
 var requestify = require('requestify'); 
 
 
