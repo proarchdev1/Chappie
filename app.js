@@ -95,7 +95,7 @@ controller.hears(['reset my password', 'reset password','can you reset my passwo
 						if(emailphoneverfied==true&&emailsent==true)
 						{
 							bot.startConversation(message, function (err, convo) {
-							convo.ask('Please provide the OTP sent to your mail', function (response, convo) {							
+							convo.ask('Please provide the OTP which I sent to you...', function (response, convo) {							
                                       if(verifyOTP == response.text){
 										  console.log("otp verified");
 										  convo.say("OTP verified, please wait while I reset your password");
@@ -103,7 +103,7 @@ controller.hears(['reset my password', 'reset password','can you reset my passwo
 												 var passChangedBody=response.getBody();
 												 if(passChangedBody.otpsent==true)
 												 {
-													 convo.say("Hey,"+username+" I sent you temporary password for next login");
+													 convo.say("Hey, "+username+" I sent you temporary password for next login");
 													 convo.say("Anything else you want me to do?")
 													 convo.next();
 												 }
