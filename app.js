@@ -88,11 +88,11 @@ controller.hears(['reset my password', 'reset password','can you reset my passwo
 						var verifyOTP=sendpassresetotpBody.otp;
 						var emailphoneverfied=sendpassresetotpBody.emailphoneverfied;
 						var nouserdetails=sendpassresetotpBody.nouserdetails
-						var emailsent=sendpassresetotpBody.emailsent;
+						var otpsent=sendpassresetotpBody.otpsent;
 						var phoneverified=sendpassresetotpBody.phoneverified;
 						var emailverified=sendpassresetotpBody.emailverified;
 						console.log(sendpassresetotpBody);
-						if(emailphoneverfied==true&&emailsent==true)
+						if(emailphoneverfied==true && otpsent==true)
 						{
 							bot.startConversation(message, function (err, convo) {
 							convo.ask('Please provide the OTP which I sent to you...', function (response, convo) {							
@@ -123,26 +123,34 @@ controller.hears(['reset my password', 'reset password','can you reset my passwo
 							});
 							});
 						}
-						else if(emailphoneverfied == true && emailsent == false && nouserdetails == false){	
+						else if(emailphoneverfied == true && otpsent == false && nouserdetails == false){	
 						bot.startConversation(message, function (err, convo) {
-							convo.say("Email or phone are not verified, please sign in to portal and verify your account");
+							convo.say("Sorry, Please try again...");
 							convo.say("Anything else you want me to do?");
 							convo.next();
 						});
 						}
-						
-						else if(emailphoneverfied==false && emailsent==false && nouserdetails == true)
+						else if(emailphoneverfied == false && otpsent == false && nouserdetails == false){	
+							bot.startConversation(message, function (err, convo) {
+								convo.say("Please sign into portal and verify your details");
+								convo.say("Anything else you want me to do?");
+								convo.next();
+							});
+							}
+						else if(emailphoneverfied==false && otpsent==false && nouserdetails == true)
 						{
 							bot.startConversation(message, function (err, convo) {	
-							   console.log("no user details sign in to portal");
-							   convo.say("I cannot find your details, please sign into portal");
+							   console.log("no user details, please sign in to portal");
+							   convo.say("Sorry, I cannot find your details, please sign into portal");
+							   convo.say("Anything else you want me to do?");
 							   convo.next();
 							});
 						}
 						else{
 							 bot.startConversation(message, function (err, convo) {	
 							 console.log("Server is busy,Please try again later ");
-							 convo.say("Server is busy,Please try again later");
+							 convo.say("Sorry, server is busy, please try again later...");
+							 convo.say("Anything else you want me to do?");
 							 convo.next();
 							});
 						}		
