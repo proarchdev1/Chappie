@@ -97,13 +97,13 @@ controller.hears(['reset my password', 'reset password','can you reset my passwo
 							bot.startConversation(message, function (err, convo) {
 							convo.ask('Please provide the OTP which I sent to you...', function (response, convo) {							
                                       if(verifyOTP == response.text){
-										  console.log("otp verified");
-										  convo.say("OTP verified, please wait while I reset your password");
+										  console.log("otp verified");										 
 											 requestify.get(aPI+'api/resetpassword/'+username).then(function(response) {
 												 var passChangedBody=response.getBody();
 												 
 												 if(passChangedBody.passworddelivered==true)
 												 {
+													 convo.say("OTP verified, please wait while I reset your password");
 													 convo.say("Hey, "+username+" I sent you temporary password for next login");
 													 convo.say("Anything else you want me to do?")
 													 convo.next();
